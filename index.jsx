@@ -1,5 +1,7 @@
 const connection = require("./src/config");
 const express = require("express");
+const Rectangle = require("./Rectangle")
+const RectangleTest = require("./test/Rectangle.test")
 
 const port = 3000;
 const app = express();
@@ -37,7 +39,6 @@ function capitalizeFirstLetters(input){
   if (input.length > 0 && !input.includes(" ")) {
     return input[0].toUpperCase() + input.slice(1)
   } else if (input === "") {
-    console.log("----------- in first elsif")
     return ""
   } else if (input.length > 0 && input.includes(" ")) {
     let wordsArray = input.split(" ");
@@ -47,6 +48,7 @@ function capitalizeFirstLetters(input){
     return wordsArray.join(' ');
   }
 }
+
 assert.strictEqual(capitalizeFirstLetters(''), '');
 assert.strictEqual(capitalizeFirstLetters('javaScript'), 'JavaScript');
 assert.strictEqual(capitalizeFirstLetters('javaScript cest trop cool'), 'JavaScript Cest Trop Cool');

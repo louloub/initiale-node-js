@@ -4,4 +4,4 @@ function capitalizeFirst(input) {
       : '';
   }
   
-  module.exports = capitalizeFirst;
+module.exports = capitalizeFirst;
