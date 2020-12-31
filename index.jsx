@@ -1,31 +1,12 @@
-const connection = require("./src/config");
-const express = require("express");
-// const movies = require("./movies");
-// const users = require("./users");
+// index.js
+const app = require('./app');
 
-const port = 3000;
-const app = express();
+const port = process.env.port || 3000;
 
-app.use(express.json()) // For JSON format
+app.listen(3000, (err) => {
+  if (err) {
+    throw new Error(`An error occurred: ${err.message}`);
+  }
+  console.log(`Server is listening on ${port}`);
+});
 
-function logInfos(req, res, next) {
-  console.log(`${req.method} request from ${req.hostname}`);
-  next();
-}
-
-app.use(logInfos); 
-
-
-app.listen(port, () => {
-    console.log(`Server is runing on ${port}`);
-  });
-  
-  connection.connect(function(err) {
-    if (err) {
-      console.error('error connecting: ' + err.stack);
-      return;
-    }
-  
-    console.log('connected as id ' + connection.threadId);
-  });
-  
