@@ -39,19 +39,13 @@ app.get("/cryptolist", (request, response) => {
 app.post(`/cryptolist/newCrypto`, async (request, response) => {
   console.log("newCrypto request.body ==> ", request.body.newCoin);
   try {
-    const {
-      name,
-      coin,
-      type,
-      description
-    } = request.body.newCoin
-    console.log(name)
-    const addNewCrypto = await connection.query(
-      `INSERT INTO crypto SET ?`,
-      [{name,coin,type,description}]
-    );
+    const { name, coin, type, description } = request.body.newCoin;
+    console.log(name);
+    const addNewCrypto = await connection.query(`INSERT INTO crypto SET ?`, [
+      { name, coin, type, description }
+    ]);
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 });
 
