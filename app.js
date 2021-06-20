@@ -22,11 +22,9 @@ app.delete("/cryptolist/:cryptoId", async (request, response) => {
 });
 
 // GET - Retrieve all of the data from your table
-app.get("/cryptolist", (request, response) => {
-  console.log("in");
+app.get("/cryptoList", (request, response) => {
   try {
     connection.query(`SELECT * FROM crypto`, (err, results) => {
-      console.log("result ==> ", results);
       response.status(200).json(results);
     });
   } catch (err) {
@@ -37,24 +35,32 @@ app.get("/cryptolist", (request, response) => {
 
 // POST new crypto in db
 app.post(`/cryptolist/newCrypto`, async (request, response) => {
-  console.log("newCrypto request.body ==> ", request.body.newCoin);
+  console.log("--- in new crypto ---");
+  console.log("--- request.body.newCoin ==> ", request.body.newCoin);
   try {
+    console.log("BACK in TRY ");
     const { name, coin, type, description } = request.body.newCoin;
-    console.log(name);
-    const addNewCrypto = await connection.query(`INSERT INTO crypto SET ?`, [
+    await connection.query(`INSERT INTO crypto SET ?`, [
       { name, coin, type, description }
     ]);
+    console.log("BACK in end TRY ");
   } catch (err) {
     console.log(err);
   }
 });
 
-// POST Actualise crypto price with COINGECKO online price
-app.post(`/cryptolist`, async (request, response) => {
+// POST - Actualise crypto price with COINGECKO online price
+app.post(`/cryptoListPrice`, async (request, response) => {
   try {
-    const { id: id, actualPrice: actualPrice } = request.body;
+    const {
+      id: id,
+      actualPrice: actualPrice,
+      marketCap: marketCap
+    } = request.body;
+    console.log("BACK cryptoId ==> ", id);
+    console.log("BACK actualPrice ==> ", actualPrice);
     const cryptoResult = await connection.query(
-      `UPDATE crypto SET actualPrice = ${actualPrice} WHERE id = ${id}`,
+      `UPDATE crypto SET actualPrice = ${actualPrice}, marketCap = ${marketCap} WHERE id = ${id}`,
       [{ actualPrice }]
     );
 
@@ -62,7 +68,29 @@ app.post(`/cryptolist`, async (request, response) => {
       data: {
         actualPrice
       },
-      message: "🎉 Successfully saved crypto list"
+      message: "🎉 Successfully saved crypto list with new price"
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// POST Actualise crypto market cap with COINGECKO online price
+app.post(`/cryptoListMarketCap`, async (request, response) => {
+  try {
+    const { id: id, marketCap: marketCap } = request.body;
+    console.log("BACK cryptoId ==> ", id);
+    console.log("BACK marketCap ==> ", marketCap);
+    const cryptoResult = await connection.query(
+      `UPDATE crypto SET marketCap = ${marketCap} WHERE id = ${id}`,
+      [{ marketCap }]
+    );
+
+    return response.status(200).json({
+      data: {
+        marketCap
+      },
+      message: "🎉 Successfully saved crypto list with new market cap"
     });
   } catch (err) {
     console.log(err);
